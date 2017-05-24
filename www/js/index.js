@@ -4,41 +4,50 @@
 
 var app = {
     initialize: function() {
-         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     onDeviceReady: function() {
-       deviceList.innerHTML = '';
-       ble.startScanWithOptions([],  {reportDuplicates:true}, app.onDiscoverDevice, app.onError);
+        deviceList.innerHTML = '';
+        ble.startScanWithOptions([], {
+            reportDuplicates: true
+        }, app.onDiscoverDevice, app.onError);
     },
     onDiscoverDevice: function(device) {
 
         if (device.name.match(/tjlscale/i)) {
 
             var adData = new Uint8Array(device.advertising);
-            adData = adData.slice(8,14);
+            adData = adData.slice(8, 14);
             var state = app.compileState(adData);
 
             var html = 'Nazwa: <b>' + device.name + '</b><br/>' +
-                    'RSSI: '+ device.rssi + 
-                    '<br/>MAC:' + device.id +
-                    '<br/>Measurement: ' + state.measurement + ' ' + state.unit +
-                    '<br/>Battery low: ' + state.batt_low +
-                    '<br/>Overload: ' + state.overload +
-                    '<br/>Measurement still: ' + state.measurement_still;
+                'RSSI: ' + device.rssi +
+                '<br/>MAC:' + device.id +
+                '<br/>Measurement: ' + state.measurement + ' ' + state.unit +
+                '<br/>Battery low: ' + state.batt_low +
+                '<br/>Overload: ' + state.overload +
+                '<br/>Measurement still: ' + state.measurement_still;
 
             deviceList.innerHTML = html;
 
 
         }
-    }, 
+    },
     onError: function(reason) {
         alert("ERROR: " + reason);
     },
     compileState: function(data) {
-        var state = {unit: '', measurement: 0.0, negative: false, batt_low: false, overload: false, measurement_still: false};
+        var state = {
+            unit: '',
+            measurement: 0.0,
+            negative: false,
+            batt_low: false,
+            overload: false,
+            measurement_still: false
+        };
 
         state.unit = app.getUnit(data[0]);
-        var hex_components = [data[2] >> 4, data[3] >> 4, data[4] >> 4, data[5] >> 4];        
+        var hex_components = [data[2] >> 4, data[3] >> 4, data[4] >> 4, data[5] >> 4];
         state.batt_low = (data[1] & 4) > 0;
         state.negative = (data[1] & 8) > 0;
         state.overload = (data[1] & 2) > 0;
@@ -48,18 +57,24 @@ var app = {
         for (var i = 0; i < hex_components.length; i++) {
             hex_string = hex_string + hex_components[i].toString(16);
         }
-        state.measurement = parseInt(hex_string , 16);
+        state.measurement = parseInt(hex_string, 16);
         state.measurement = app.calculateUnit(data[0], state.measurement);
 
-        if(state.negative)
-        {
+        if (state.negative) {
             state.measurement = state.measurement * -1;
         }
 
         return state;
     },
     getUnit: function(num) {
-        var unitMap = {1: 'g', 2: 'oz', 4: 'oz:lb', 8: 'ml', 16: 'fl.oz', 20: 'kg'};
+        var unitMap = {
+            1: 'g',
+            2: 'oz',
+            4: 'oz:lb',
+            8: 'ml',
+            16: 'fl.oz',
+            20: 'kg'
+        };
         return unitMap[num];
     },
     calculateUnit: function(unit_num, value) {
