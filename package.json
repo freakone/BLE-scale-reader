@@ -4,7 +4,9 @@
     "displayName": "BLE-scale-reader",
     "cordova": {
         "platforms": [
-            "android"
+            "android",
+            "ios",
+            "windows"
         ],
         "plugins": {
             "cordova-plugin-ble-central": {},
@@ -12,7 +14,11 @@
         }
     },
     "dependencies": {
-        "cordova-android": "~6.2.3",
-        "cordova-plugin-ble-central": "~1.1.4"
+        "cordova-android": "^6.2.3",
+        "cordova-ios": "^4.4.0",
+        "cordova-plugin-ble-central": "^1.1.4",
+        "cordova-plugin-bluetoothle": "^4.4.2",
+        "cordova-plugin-compat": "^1.0.0",
+        "cordova-windows": "^5.0.0"
     }
 }

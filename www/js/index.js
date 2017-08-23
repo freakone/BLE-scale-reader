@@ -14,13 +14,13 @@ var app = {
     },
     onDiscoverDevice: function(device) {
 
-        if (device.name.match(/tjlscale/i)) {
+        if (device.name.match(/tjlscale/i) || device.name.match(/doctorfit/i)) {
 
             var adData = new Uint8Array(device.advertising);
             adData = adData.slice(8, 14);
             var state = app.compileState(adData);
 
-            var html = 'Nazwa: <b>' + device.name + '</b><br/>' +
+            var html = 'Name: <b>' + device.name + '</b><br/>' +
                 'RSSI: ' + device.rssi +
                 '<br/>MAC:' + device.id +
                 '<br/>Measurement: ' + state.measurement + ' ' + state.unit +

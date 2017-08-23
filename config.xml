@@ -10,7 +10,9 @@
     <content src="index.html" />
     <access origin="*" />
     <preference name="orientation" value="portrait" />
-    <engine name="android" spec="~6.2.3" />
-    <plugin name="cordova-plugin-ble-central" spec="~1.1.4" />
-    <plugin name="cordova-plugin-bluetoothle" />
+    <engine name="android" spec="^6.2.3" />
+    <engine name="ios" spec="^4.4.0" />
+    <engine name="windows" spec="^5.0.0" />
+    <plugin name="cordova-plugin-ble-central" spec="^1.1.4" />
+    <plugin name="cordova-plugin-bluetoothle" spec="^4.4.2" />
 </widget>
